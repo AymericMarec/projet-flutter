@@ -440,7 +440,7 @@ class _SettingsView extends ConsumerWidget {
                     spacing: 12,
                     runSpacing: 12,
                     children: _availableColors.map((color) {
-                      final isSelected = color.value == colorSeed.value;
+                      final isSelected = color.toARGB32() == colorSeed.toARGB32();
                       return InkWell(
                         onTap: () => ref.read(colorSeedProvider.notifier).setColor(color),
                         borderRadius: BorderRadius.circular(24),
@@ -457,7 +457,7 @@ class _SettingsView extends ConsumerWidget {
                             boxShadow: [
                               if (isSelected)
                                 BoxShadow(
-                                  color: color.withOpacity(0.4),
+                                  color: color.withValues(alpha: 0.4),
                                   blurRadius: 8,
                                   spreadRadius: 2,
                                 )
