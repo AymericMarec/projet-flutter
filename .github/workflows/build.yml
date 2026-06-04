@@ -1,4 +1,4 @@
-name: Build
+name: Flutter Build
 
 on:
   push: { branches: ["main"] }
