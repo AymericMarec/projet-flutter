@@ -1,0 +1,29 @@
+name: Build
+
+on:
+  push: { branches: ["main"] }
+
+jobs:
+  build:
+    name: build
+    strategy:
+      matrix:
+        include:
+          - { os: windows-latest, platform: windows, artifact: build/windows/x64/runner/Release/ }
+          - { os: ubuntu-latest, platform: linux, artifact: build/linux/x64/release/bundle/ }
+          - { os: macos-latest, platform: macos, artifact: build/macos/Build/Products/Release/ }
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with: { flutter-version: '3.44.1', cache: true }
+
+      - run: flutter pub get
+      - run: dart run build_runner build --delete-conflicting-outputs
+      - run: flutter build ${{ matrix.platform }} --release
+      
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.platform }}-build
+          path: ${{ matrix.artifact }}
